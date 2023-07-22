@@ -115,11 +115,13 @@ String.prototype.addSlashes = function () {
 //api ��� ����
 //----------------------------------
 
-app.get('/v1.0/auth/listUser', function (req, res) {
-    funcauth.auth_get_list(req, res);
+app.post('/v1.0/auth/login', function (req, res) {
+    console.log('/v1.0/auth/login');
+    funcauth.auth_login(req, res);
 });
 
 
 app.post('/v1.0/user/register', function (req, res) {
+    console.log('/v1.0/user/register');
     funcuser.user_register(req, res);
 });

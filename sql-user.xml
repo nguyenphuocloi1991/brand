@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="user">
-    <!-- <select id="get_admin_info">
-        SELECT
-        *
-        FROM wt_admin
-    </select> -->
+    <select id="user_check">
+        SELECT 
+            count(user_name) as number
+        FROM 
+            pl_user 
+        WHERE user_name = #{user_name}
+    </select>
+
     <insert id="user_create">
         insert into pl_user(
 			user_name,
 			pass_word,
 			full_name,
-			email,
-            phone,
+			phone,
+            email,
+            level,
+            address,
             status,
             create_date,
             update_date
@@ -20,8 +25,10 @@
 			#{user_name},
 			#{pass_word},
 			#{full_name},
-			#{email},
             #{phone},
+			#{email},
+            #{level},
+            #{address},
 			#{status},
 			now(),
 			now()
@@ -33,6 +40,6 @@
         SET 
             pass_word =#{pass_word},
             reg_date = now()
-        WHERE Id = ${Id}
+        WHERE user_name = ${user_name}
     </update>
 </mapper>
