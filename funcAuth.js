@@ -46,6 +46,7 @@ async function auth_login(req, res) {
     param.user_name = user_name;
     param.pass_word = pass_word;
 
+    
 	sql = mybatisMapper.getStatement('auth', 'auth_login', param, fm);
    
 	var [row] = await pool.query(sql);
@@ -57,15 +58,34 @@ async function auth_login(req, res) {
 		}).send(JSON.stringify({success:false, message:"You entered the wrong username.", errorCode:-100, data:null}));
 		return;
     }
-
+    const today = new Date().format("yyyy-mm-dd HH:MM:ss")
     var passwd =  getPassEncrypt(user_name, pass_word);
-   
+   console.log(passwd);
     if(row[0].pass_word == passwd)
     {
+        const ip = req.clientIp.indexOf("::ffff:") >= 0 ? req.clientIp.slice("::ffff:")[1] : req.clientIp
+        const data = {
+            login_id: row[0].user_name,
+            login_gb: "A",
+            login_nm: row[0].full_name,
+            login_sdate: today,
+            reg_ip: ip,
+           
+        }
+        const token = jwt.sign({
+            admin_id: row[0].user_name,
+            admin_nm: row[0].full_name,
+            login_sdate: data.login_sdate,
+            ip: data.reg_ip,
+            admin_login_use: true
+        }, SECRET_KEY, {
+            algorithm: 'HS256',
+            expiresIn: '24h'
+        })
         
         res.set({
             'content-type': 'application/json'
-        }).send(JSON.stringify({success:true, message:"SUCCESS", errorCode:0, data:row[0]}));
+        }).send(JSON.stringify({success:true, message:"SUCCESS", errorCode:0, access_token: token, data: data}));
     }else{
         let js ={}
         res.set({

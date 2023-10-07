@@ -32,7 +32,7 @@ function settingDb(poolConnect) {
 function getPassEncrypt(pass, user_id) {
     let passwd
     if (pass) {
-        let shop_key = "pyungan"
+        let shop_key = "juhi"
         passwd = fc.hash("sha512", `${fc.md5(pass)}${shop_key}${user_id}`)
     }
     return passwd
@@ -43,11 +43,10 @@ module.exports.settingDb = settingDb;
 async function user_register(req, res) {
  
     var user_name = decodeURIComponent(req.body.user_name); if(user_name == null || user_name == "" || user_name == "undefined" || user_name == undefined) user_name = "";
-    var pass_word = decodeURIComponent(req.body.pass_word); if(pass_word == null || pass_word == "" || pass_word == "undefined" || pass_word == undefined) pass_word = "";
+    var pass_word = decodeURIComponent(req.body.password); if(pass_word == null || pass_word == "" || pass_word == "undefined" || pass_word == undefined) pass_word = "";
     var full_name = decodeURIComponent(req.body.full_name); if(full_name == null || full_name == "" || full_name == "undefined" || full_name == undefined) full_name = "";
-    var phone = decodeURIComponent(req.body.phone); if(phone == null || phone == "" || phone == "undefined" || phone == undefined) phone = "";
+    var phone = decodeURIComponent(req.body.number_phone); if(phone == null || phone == "" || phone == "undefined" || phone == undefined) phone = "";
     var email = decodeURIComponent(req.body.email); if(email == null || email == "" || email == "undefined" || email == undefined) email = "";
-    var level = decodeURIComponent(req.body.level); if(level == null || level == "" || level == "undefined" || level == undefined) level = "";
     var address = decodeURIComponent(req.body.address); if(address == null || address == "" || address == "undefined" || address == undefined) address = "";
     var status = decodeURIComponent(req.body.status); if(status == null || status == "" || status == "undefined" || status == undefined) status = 1;
     
@@ -78,7 +77,6 @@ async function user_register(req, res) {
             param.full_name = full_name;
             param.phone = phone;
             param.email = email;
-            param.level = level;
             param.address = address;
             param.status = status;
 
